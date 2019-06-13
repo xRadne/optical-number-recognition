@@ -1,5 +1,6 @@
 import numpy as np
 from mnist import MNIST
+import pickle
 
 from sklearn.neural_network import MLPClassifier
 from sklearn import preprocessing
@@ -10,17 +11,17 @@ mndata = MNIST('data')
 images_train, labels_train = mndata.load_training()
 images_test, labels_test = mndata.load_testing()
 
-images_train, labels_train = images_train[:1000], labels_train[:1000]
-images_test, labels_test = images_test[:400], labels_test[:400]
+images_train, labels_train = images_train[:10000], labels_train[:10000]
+images_test, labels_test = images_test[:2000], labels_test[:2000]
 
 
-def transforn_labels(x):
+def transform_labels(x):
     arr = np.zeros(10)
     arr[x] = 1
     return arr
 
-labels_train = np.array(list(map(transforn_labels, labels_train)))
-labels_test = np.array(list(map(transforn_labels, labels_test)))
+labels_train = np.array(list(map(transform_labels, labels_train)))
+labels_test = np.array(list(map(transform_labels, labels_test)))
 
 
 scaler = preprocessing.StandardScaler()
@@ -34,4 +35,8 @@ mlp.fit(images_train, labels_train)
 
 predictions = mlp.predict(images_test)
 
-print(classification_report(labels_test,predictions))  
+print(classification_report(labels_test,predictions))
+
+
+with open('model/mlp.pickle', 'wb') as f:
+    pickle.dump(mlp, f, pickle.HIGHEST_PROTOCOL)
