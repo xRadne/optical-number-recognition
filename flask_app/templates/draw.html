@@ -16,6 +16,9 @@
       display: inline-block;
       background-color: lightgrey;
     }
+    #answerBox {
+      background: white;
+    }
   </style>
 
 </head>
@@ -25,11 +28,13 @@
   <br/>
   <div id="classifyButton" class="button">Classify</div>
   <div id="clearButton" class="button">Clear</div>
-  <span id="answerBox"></span>
+  <span id="answerBox">Guess: </span>
   <script>
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    answerBox = document.getElementById('answerBox'); 
     drawing = false;
+    animationTimer = null;
     var x = 0;
     var y = 0;
 
@@ -50,6 +55,14 @@
     function stopDrawing(e) {
       drawLine(ctx, x, y, e.offsetX, e.offsetY);
       drawing = false;
+      animationTimer = AnimationTimer(
+        updateColor, 
+        () => {
+          updateColor(0);
+          sendClassifyRequest();
+        }, 
+        2000, 
+        100);
     }
 
     function drawLine(context, x1, y1, x2, y2) {
@@ -70,12 +83,12 @@
     classifyButton = document.getElementById('classifyButton');
     answer = document.getElementById('answerBox');
 
-    function sendXHR(e) {
+    function sendClassifyRequest(e) {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', 'http://127.0.0.1:5000/classify', true);
 
       xhr.onload = function () {
-        answer.innerHTML = xhr.response;
+        answer.innerHTML = 'Guess: ' + xhr.response;
       };
 
       testData = [];
@@ -92,7 +105,7 @@
       xhr.send(JSON.stringify(testData));
     }
 
-    classifyButton.addEventListener('click', sendXHR);
+    classifyButton.addEventListener('click', sendClassifyRequest);
 
     clearButton = document.getElementById('clearButton');
 
@@ -103,6 +116,35 @@
     
     clearButton.addEventListener('click', clearCanvas)
     
+    function updateColor(value) {
+    brightness = Math.round((1 - value) * 255).toString(16)
+    colorString = `#${brightness}${brightness}${brightness}`
+    answerBox.style.background = colorString;
+  }
+
+    function AnimationTimer(onUpdate, onFinished, duration, timestep) {
+      startTime = new Date();
+      onUpdate(0);
+
+      this.update = function() {
+        var deltaTime = new Date() - startTime;
+        if (deltaTime > duration) { onUpdate(1); return; }
+        onUpdate(deltaTime / duration);
+      }
+
+      var interval = setInterval(this.update, timestep);    
+      var timeout = setTimeout(() => {
+        clearInterval(interval)
+        onFinished();
+      }, duration)
+
+      return { 
+        stop: function() {
+          clearInterval(interval);
+          clearTimeout(timeout);
+        }
+      }
+    }
 
   </script>
 </body>

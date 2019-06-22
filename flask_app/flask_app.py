@@ -27,7 +27,7 @@ def classify():
     # image = np.split(image, 28)
     # plt.imshow(image, 'binary')
     # plt.show()
-    return Response(f"It looks like a {prediction}")
+    return Response(f"{prediction}")
 
 if __name__ == '__main__':
     app.run(debug=True)
