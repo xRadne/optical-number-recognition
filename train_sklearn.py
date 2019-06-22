@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.metrics import classification_report, confusion_matrix
 
 
-mndata = MNIST('data')
+mndata = MNIST('MNIST_Dataset')
 images_train, labels_train = mndata.load_training()
 images_test, labels_test = mndata.load_testing()
 
@@ -40,3 +40,4 @@ print(classification_report(labels_test,predictions))
 
 with open('model/mlp.pickle', 'wb') as f:
     pickle.dump(mlp, f, pickle.HIGHEST_PROTOCOL)
+    print("The model was saved as 'model/mlp.pickle'")
