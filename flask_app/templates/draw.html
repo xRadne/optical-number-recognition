@@ -20,6 +20,10 @@
     .active {
       background-color: forestgreen;
     }
+
+    #answerBox {
+      background: white;
+    }
   </style>
 
 </head>
@@ -33,7 +37,7 @@
   <input type="number" id="label" name="label"
        min="0" max="10">
   <div id="submit" class="button">Submit mode</div>
-  <span id="answerBox"></span>
+  <span id="answerBox">Guess: </span>
   <script type="text/javascript" src="{{ url_for('static', filename='draw.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='classify.js') }}"></script>
 </body>

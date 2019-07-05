@@ -23,7 +23,7 @@ def classify():
     prediction = mlp.predict(image)[0]
     prediction = prediction.argmax(0)
 
-    return Response(f"It looks like a {prediction}")
+    return Response(str(prediction))
 
 @app.route('/data', methods=['POST'])
 def store_data():

@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.metrics import classification_report, confusion_matrix
 
 
-mndata = MNIST('data')
+mndata = MNIST('MNIST_Dataset')
 images_train, labels_train = mndata.load_training()
 
 images_train, labels_train = images_train[:30000], labels_train[:30000]

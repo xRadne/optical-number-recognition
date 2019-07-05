@@ -1,5 +1,3 @@
-
-
 function sampleImage() {
   samples = [];
   imageSize = 420;
@@ -15,15 +13,17 @@ function sampleImage() {
   return samples;
 }
 
+
+
 //Classify
 classifyButton = document.getElementById('classifyButton');
 
-function classifyXHR(e) {
+function sendClassifyRequest(e) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', 'http://127.0.0.1:5000/classify', true);
 
   xhr.onload = function () {
-    answer.innerHTML = xhr.response;
+    answer.innerHTML = 'Guess: ' + xhr.response;
   };
 
   testData = sampleImage();
@@ -31,7 +31,7 @@ function classifyXHR(e) {
   xhr.send(JSON.stringify(testData));
 }
 
-classifyButton.addEventListener('click', classifyXHR);
+classifyButton.addEventListener('click', sendClassifyRequest);
 
 //clear
 clearButton = document.getElementById('clearButton');
@@ -39,7 +39,7 @@ answer = document.getElementById('answerBox');
 
 function clearCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  answer.innerHTML = "";
+  answer.innerHTML = "Guess: ";
 }
 
 clearButton.addEventListener('click', clearCanvas);
@@ -77,4 +77,31 @@ function storeDataXHR(e) {
   }
 
   xhr.send(JSON.stringify(data));
+}
+
+function updateColor(value) {
+  brightness = Math.round((1 - value) * 255).toString(16)
+  colorString = `#${brightness}${brightness}${brightness}`
+  answerBox.style.background = colorString;
+}
+
+function AnimationTimer(onUpdate, onFinished, duration, timestep) {
+  startTime = new Date();
+  onUpdate(0);
+  this.update = function () {
+    var deltaTime = new Date() - startTime;
+    if (deltaTime > duration) { onUpdate(1); return; }
+    onUpdate(deltaTime / duration);
+  }
+  var interval = setInterval(this.update, timestep);
+  var timeout = setTimeout(() => {
+    clearInterval(interval)
+    onFinished();
+  }, duration)
+  return {
+    stop: function () {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    }
+  }
 }

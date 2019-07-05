@@ -1,5 +1,6 @@
 canvas = document.getElementById('canvas');
 ctx = canvas.getContext('2d');
+animationTimer = null;
 drawing = false;
 var x = 0;
 var y = 0;
@@ -24,6 +25,16 @@ function stopDrawing(e) {
 
   if (submitMode) {
     storeDataXHR();
+  }
+  else {
+    animationTimer = AnimationTimer(
+      updateColor,
+      () => {
+        updateColor(0);
+        sendClassifyRequest();
+      },
+      2000,
+      100);
   }
 }
 
