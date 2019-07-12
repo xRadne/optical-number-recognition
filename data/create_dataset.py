@@ -50,10 +50,10 @@ def translate_image(x, y, data):
 
     return data
 
-with open('data/images.json', 'r') as f:
+with open('images.json', 'r') as f:
     images = json.load(f)
 
-with open('data/labels.json', 'r') as f:
+with open('labels.json', 'r') as f:
     labels = json.load(f)
 
 #Select and save test data
@@ -70,10 +70,10 @@ test_labels = np.array(labels[:test_set_size], dtype=int)
 
 test_images /= 255
 
-with open('data/test_images.pickle', 'wb') as f:
+with open('test_images.pickle', 'wb') as f:
     pickle.dump(test_images, f, pickle.HIGHEST_PROTOCOL)
 
-with open('data/test_labels.pickle', 'wb') as f:
+with open('test_labels.pickle', 'wb') as f:
     pickle.dump(test_labels, f, pickle.HIGHEST_PROTOCOL)
 
 training_images = images[test_set_size:]
@@ -104,8 +104,8 @@ for image, label in zip(training_images, training_labels):
                 dataset_labels[index] = int(label)
                 index += 1
 
-with open('data/training_images.pickle', 'wb') as f:
+with open('training_images.pickle', 'wb') as f:
     pickle.dump(dataset_images, f, pickle.HIGHEST_PROTOCOL)
 
-with open('data/training_labels.pickle', 'wb') as f:
+with open('training_labels.pickle', 'wb') as f:
     pickle.dump(dataset_labels, f, pickle.HIGHEST_PROTOCOL)
