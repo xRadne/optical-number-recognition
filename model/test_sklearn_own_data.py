@@ -27,22 +27,22 @@ def evaluate_model(model, features, labels):
     print(confusion_matrix(labels, predictions))
 
 
-with open('model/mlp_own_data.pickle', 'rb') as f:
+with open('mlp_own_data.pickle', 'rb') as f:
     mlp = pickle.load(f)
 
-with open('data/training_images.pickle', 'rb') as f:
+with open('../data/training_images.pickle', 'rb') as f:
     images = pickle.load(f)
 
-with open('data/training_labels.pickle', 'rb') as f:
+with open('../data/training_labels.pickle', 'rb') as f:
     labels = pickle.load(f)
 
 print("Evaluate training data")
 evaluate_model(mlp, images, labels)
 
-with open('data/test_images.pickle', 'rb') as f:
+with open('../data/test_images.pickle', 'rb') as f:
     images = pickle.load(f)
 
-with open('data/test_labels.pickle', 'rb') as f:
+with open('../data/test_labels.pickle', 'rb') as f:
     labels = pickle.load(f)
 
 print("Evaluate test data")
